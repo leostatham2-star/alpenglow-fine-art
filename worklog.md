@@ -20,3 +20,22 @@ Work Log:
 Stage Summary:
 - Deliverable: runnable Next.js app on port 3000 (preview panel), brand Alpenglow Fine Art
 - Key files: src/app/page.tsx (SPA root), src/lib/photos.ts (20-photo catalog + site constants), src/hooks/useHashRoute.ts, src/components/site/{logo,header,footer}.tsx, src/components/site/views/{home,gallery,photo,about,prints,contact,policies}.tsx, src/app/api/{contact,newsletter}/route.ts
+
+---
+Task ID: 2
+Agent: main (Z.ai)
+Task: Prepare the Alpenglow Fine Art site for GitHub push and Vercel deployment while keeping z.ai sandbox access
+
+Work Log:
+- Audited repo: git initialized (branch main, no remote), sandbox template quirks found (standalone output, CDN-hosted images, tracked .env/db/artifacts)
+- Copied all 24 referenced photos from assets/img to public/images (28MB); switched photos.ts CDN constant to "/images" so the site is fully self-contained
+- next.config.ts: output "standalone" now only applies outside Vercel (process.env.VERCEL guard)
+- package.json: renamed to alpenglow-fine-art v1.0.0; build script now runs prisma generate first and guards the standalone cp steps; added engines node >=20
+- db.ts wraps PrismaClient init in try/catch (nullable); contact + newsletter routes fall back to console logging and still return ok when DB is unreachable (Vercel serverless has no persistent SQLite)
+- Repo hygiene: untracked .env, db/custom.db, ref_page.html, assets/, tests/, examples/, .zscripts/dev.pid; .gitignore updated (+ !.env.example); added .env.example and full README (local dev, Vercel deploy, form fallback explanation)
+- Committed as d86aec7 "Prepare site for GitHub and Vercel deployment"; working tree clean
+- Verified sandbox: home 200, /images/* 200 image/jpeg, newsletter + contact POST ok, DB records confirmed written
+
+Stage Summary:
+- Repo is Vercel-ready and GitHub-clean; awaiting user credentials (GitHub username, repo name, visibility, PAT) to push
+- Sandbox preview unaffected; site still serves on port 3000 with working forms
