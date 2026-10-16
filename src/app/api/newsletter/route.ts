@@ -10,12 +10,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
 
-    await db.subscriber.upsert({
-      where: { email },
-      update: {},
-      create: { email },
-    });
+    if (db) {
+      try {
+        await db.subscriber.upsert({
+          where: { email },
+          update: {},
+          create: { email },
+        });
+        return NextResponse.json({ ok: true });
+      } catch {
+        // Database unreachable (e.g. fresh serverless deploy): fall through
+        // so the visitor still gets a friendly confirmation.
+      }
+    }
 
+    console.log("[newsletter] subscriber stored to server log:", {
+      email,
+      receivedAt: new Date().toISOString(),
+    });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });

@@ -30,7 +30,7 @@ export type Photo = {
   featured?: boolean;
 };
 
-const CDN = "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt";
+const CDN = "/images";
 
 export const PRINT_SIZES: PhotoSize[] = [
   { label: "Petite", inches: "12 x 18 in", price: 245 },
