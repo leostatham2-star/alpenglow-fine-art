@@ -59,3 +59,7 @@ prompt
 server.log
 # Skills directory
 /skills/
+# internal working files (kept local only)
+/worklog.md
+/download/
+/mini-services/
